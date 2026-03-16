@@ -115,6 +115,8 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
 
     live_request_queue = LiveRequestQueue()
     is_closed = False
+    # Shared mutable ref so upstream always writes to the current queue
+    queue_ref = {"queue": live_request_queue}
 
     # Inject existing voice profile as context if available
     profile = load_profile(user_id)
@@ -164,7 +166,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
                     f"This is what makes content sound like THIS creator, not generic.]"
                 ))],
             )
-            live_request_queue.send_content(profile_context)
+            queue_ref["queue"].send_content(profile_context)
 
     # Kickstart: greet and guide the user
     kickstart = types.Content(
@@ -177,7 +179,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
             "listen to their delivery. Then WAIT for them to play something or talk to you.]"
         ))],
     )
-    live_request_queue.send_content(kickstart)
+    queue_ref["queue"].send_content(kickstart)
 
     async def upstream_task():
         try:
@@ -200,7 +202,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
                             mime_type="audio/pcm;rate=16000",
                             data=audio_data,
                         )
-                        live_request_queue.send_realtime(audio_blob)
+                        queue_ref["queue"].send_realtime(audio_blob)
 
                     elif "text" in message:
                         data = json.loads(message["text"])
@@ -211,7 +213,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
                                 role="user",
                                 parts=[types.Part(text=data["text"])],
                             )
-                            live_request_queue.send_content(content)
+                            queue_ref["queue"].send_content(content)
 
                         elif msg_type == "image":
                             image_data = base64.b64decode(data["data"])
@@ -219,7 +221,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
                                 mime_type=data.get("mimeType", "image/jpeg"),
                                 data=image_data,
                             )
-                            live_request_queue.send_realtime(image_blob)
+                            queue_ref["queue"].send_realtime(image_blob)
 
                 except (json.JSONDecodeError, KeyError, ValueError) as e:
                     logger.warning("Skipping malformed message: %s", e)
@@ -234,29 +236,49 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
 
     async def downstream_task():
         nonlocal is_closed
-        try:
-            async for event in runner.run_live(
-                user_id=user_id,
-                session_id=session_id,
-                live_request_queue=live_request_queue,
-                run_config=run_config,
-            ):
+        max_retries = 5
+        for attempt in range(max_retries):
+            try:
+                async for event in runner.run_live(
+                    user_id=user_id,
+                    session_id=session_id,
+                    live_request_queue=queue_ref["queue"],
+                    run_config=run_config,
+                ):
+                    if is_closed:
+                        return
+                    try:
+                        event_json = event.model_dump_json(
+                            exclude_none=True, by_alias=True
+                        )
+                        await websocket.send_text(event_json)
+                    except (WebSocketDisconnect, RuntimeError):
+                        return
+                    except Exception:
+                        logger.exception("Error sending event")
+                        return
+
+                # BIDI stream ended normally (Gemini dropped) — retry
                 if is_closed:
-                    break
-                try:
-                    event_json = event.model_dump_json(
-                        exclude_none=True, by_alias=True
-                    )
-                    await websocket.send_text(event_json)
-                except (WebSocketDisconnect, RuntimeError):
-                    break
-                except Exception:
-                    logger.exception("Error sending event")
-                    break
-        except asyncio.CancelledError:
-            pass
-        except Exception:
-            logger.exception("Downstream error")
+                    return
+                logger.info(
+                    "BIDI stream ended (attempt %d/%d), restarting...",
+                    attempt + 1, max_retries,
+                )
+                # Create a fresh request queue — upstream will pick it up via queue_ref
+                queue_ref["queue"] = LiveRequestQueue()
+                await asyncio.sleep(1)
+
+            except asyncio.CancelledError:
+                return
+            except Exception:
+                logger.exception("Downstream error (attempt %d)", attempt + 1)
+                if is_closed:
+                    return
+                queue_ref["queue"] = LiveRequestQueue()
+                await asyncio.sleep(2)
+
+        logger.warning("BIDI stream exhausted all retries for session %s", session_id)
 
     up = asyncio.create_task(upstream_task())
     down = asyncio.create_task(downstream_task())
@@ -272,7 +294,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
         logger.info("Session ended: %s", session_id)
     finally:
         is_closed = True
-        live_request_queue.close()
+        queue_ref["queue"].close()
         logger.info("Cleaned up: %s", session_id)
 
 
