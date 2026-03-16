@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#00d2d2"/>
+    </marker>
+    <marker id="arrow-dim" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#3a7f7f"/>
+    </marker>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="500" fill="#0a0f1a" rx="8"/>
+
+  <!-- Title -->
+  <text x="450" y="32" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600">Cadence Architecture</text>
+  <text x="450" y="50" text-anchor="middle" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="11">Real-time AI Audio Coaching via BIDI Streaming</text>
+
+  <!-- ==================== BROWSER BOX ==================== -->
+  <rect x="30" y="70" width="240" height="370" rx="10" fill="#0d1525" stroke="#1a2744" stroke-width="1.5"/>
+  <text x="150" y="95" text-anchor="middle" fill="#00d2d2" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600">BROWSER</text>
+  <text x="150" y="110" text-anchor="middle" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="9">Static HTML/JS/CSS</text>
+
+  <!-- Web Audio API sub-box -->
+  <rect x="45" y="122" width="210" height="130" rx="6" fill="#111d33" stroke="#1a2744" stroke-width="1"/>
+  <text x="150" y="140" text-anchor="middle" fill="#8899bb" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="600">Web Audio API</text>
+
+  <!-- AudioWorklet nodes -->
+  <rect x="55" y="150" width="88" height="28" rx="4" fill="#0a1628" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="99" y="162" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="8.5" font-weight="500">Mic Capture</text>
+  <text x="99" y="173" text-anchor="middle" fill="#5a7a9a" font-family="Segoe UI, Arial, sans-serif" font-size="7">AudioWorklet (1.5x)</text>
+
+  <rect x="157" y="150" width="88" height="28" rx="4" fill="#0a1628" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="201" y="162" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="8.5" font-weight="500">Tab Capture</text>
+  <text x="201" y="173" text-anchor="middle" fill="#5a7a9a" font-family="Segoe UI, Arial, sans-serif" font-size="7">AudioWorklet (0.7x)</text>
+
+  <!-- Merge arrow -->
+  <line x1="99" y1="178" x2="130" y2="196" stroke="#3a7f7f" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="201" y1="178" x2="170" y2="196" stroke="#3a7f7f" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- Mixed stream box -->
+  <rect x="85" y="196" width="130" height="24" rx="4" fill="#0a2020" stroke="#00d2d2" stroke-width="1" opacity="0.8"/>
+  <text x="150" y="212" text-anchor="middle" fill="#00d2d2" font-family="Segoe UI, Arial, sans-serif" font-size="8.5" font-weight="500">Mixed PCM Stream</text>
+
+  <!-- Playback worklet -->
+  <rect x="85" y="226" width="130" height="22" rx="4" fill="#0a1628" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="150" y="241" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="8.5">PCM Playback Worklet</text>
+
+  <!-- WebSocket Client -->
+  <rect x="60" y="270" width="180" height="34" rx="6" fill="#0a1628" stroke="#00d2d2" stroke-width="1.2" opacity="0.7"/>
+  <text x="150" y="286" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="500">WebSocket Client</text>
+  <text x="150" y="298" text-anchor="middle" fill="#5a8a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8">Bidirectional Streaming</text>
+
+  <!-- Screen Share label -->
+  <rect x="55" y="320" width="190" height="42" rx="6" fill="#111d33" stroke="#1a2744" stroke-width="1"/>
+  <text x="150" y="338" text-anchor="middle" fill="#8899bb" font-family="Segoe UI, Arial, sans-serif" font-size="9" font-weight="500">Screen Share + Tab Audio</text>
+  <text x="150" y="351" text-anchor="middle" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="7.5">getDisplayMedia({ audio: true })</text>
+
+  <!-- Input labels -->
+  <rect x="55" y="374" width="88" height="22" rx="4" fill="#1a1030" stroke="#6644aa" stroke-width="0.8"/>
+  <text x="99" y="389" text-anchor="middle" fill="#aa88dd" font-family="Segoe UI, Arial, sans-serif" font-size="8">Text + Images</text>
+
+  <rect x="155" y="374" width="88" height="22" rx="4" fill="#1a1030" stroke="#6644aa" stroke-width="0.8"/>
+  <text x="199" y="389" text-anchor="middle" fill="#aa88dd" font-family="Segoe UI, Arial, sans-serif" font-size="8">REST API calls</text>
+
+  <!-- ==================== CLOUD RUN BOX ==================== -->
+  <rect x="330" y="70" width="240" height="370" rx="10" fill="#0d1525" stroke="#1a2744" stroke-width="1.5"/>
+  <text x="450" y="95" text-anchor="middle" fill="#00d2d2" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600">GOOGLE CLOUD RUN</text>
+  <text x="450" y="110" text-anchor="middle" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="9">Python FastAPI + Uvicorn</text>
+
+  <!-- WebSocket Endpoint -->
+  <rect x="345" y="124" width="210" height="34" rx="6" fill="#0a1628" stroke="#00d2d2" stroke-width="1.2" opacity="0.7"/>
+  <text x="450" y="140" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="500">WebSocket Endpoint</text>
+  <text x="450" y="152" text-anchor="middle" fill="#5a8a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8">Audio + Text + Images</text>
+
+  <!-- ADK Runner -->
+  <rect x="345" y="170" width="210" height="52" rx="6" fill="#111d33" stroke="#1e3a5f" stroke-width="1.2"/>
+  <text x="450" y="190" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="600">Google ADK Runner</text>
+  <text x="450" y="204" text-anchor="middle" fill="#5a8a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8.5">LiveRequestQueue</text>
+  <text x="450" y="216" text-anchor="middle" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="7.5">Orchestrates Gemini BIDI streaming</text>
+
+  <!-- Voice Profile Storage -->
+  <rect x="345" y="234" width="210" height="40" rx="6" fill="#0a1628" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="450" y="252" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="500">Voice Profile Persistence</text>
+  <text x="450" y="266" text-anchor="middle" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8">JSON File Storage</text>
+
+  <!-- REST API -->
+  <rect x="345" y="286" width="210" height="28" rx="6" fill="#0a1628" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="450" y="305" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="10">REST API (Profiles)</text>
+
+  <!-- Static Files -->
+  <rect x="345" y="326" width="210" height="28" rx="6" fill="#0a1628" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="450" y="345" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="10">Static File Serving</text>
+
+  <!-- Docker label -->
+  <rect x="365" y="368" width="170" height="22" rx="4" fill="#111d33" stroke="#1a2744" stroke-width="0.8"/>
+  <text x="450" y="383" text-anchor="middle" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8.5">Dockerfile + Cloud Run Deploy</text>
+
+  <!-- Tech stack label -->
+  <text x="450" y="424" text-anchor="middle" fill="#3a5577" font-family="Segoe UI, Arial, sans-serif" font-size="8">FastAPI | Uvicorn | google-adk | Pydantic</text>
+
+  <!-- ==================== GEMINI BOX ==================== -->
+  <rect x="630" y="70" width="240" height="370" rx="10" fill="#0d1525" stroke="#1a2744" stroke-width="1.5"/>
+  <text x="750" y="95" text-anchor="middle" fill="#00d2d2" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600">GOOGLE GEMINI</text>
+  <text x="750" y="110" text-anchor="middle" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="9">gemini-2.5-flash-native-audio-latest</text>
+
+  <!-- BIDI Streaming -->
+  <rect x="645" y="124" width="210" height="34" rx="6" fill="#0a1628" stroke="#00d2d2" stroke-width="1.2" opacity="0.7"/>
+  <text x="750" y="140" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="500">BIDI Streaming</text>
+  <text x="750" y="152" text-anchor="middle" fill="#5a8a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8">via Google ADK</text>
+
+  <!-- Native Audio -->
+  <rect x="645" y="170" width="210" height="40" rx="6" fill="#111d33" stroke="#1e3a5f" stroke-width="1.2"/>
+  <text x="750" y="190" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="600">Native Audio Processing</text>
+  <text x="750" y="204" text-anchor="middle" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8">Input + Output (audio-only model)</text>
+
+  <!-- Tools -->
+  <rect x="645" y="224" width="210" height="110" rx="6" fill="#111d33" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="750" y="244" text-anchor="middle" fill="#8899bb" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="600">Tools</text>
+
+  <rect x="655" y="254" width="94" height="22" rx="3" fill="#0a1628" stroke="#1e3a5f" stroke-width="0.8"/>
+  <text x="702" y="269" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="8">analyze_delivery</text>
+
+  <rect x="755" y="254" width="90" height="22" rx="3" fill="#0a1628" stroke="#1e3a5f" stroke-width="0.8"/>
+  <text x="800" y="269" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="8">analyze_hook</text>
+
+  <rect x="655" y="280" width="94" height="22" rx="3" fill="#0a1628" stroke="#1e3a5f" stroke-width="0.8"/>
+  <text x="702" y="295" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="8">generate_script_notes</text>
+
+  <rect x="755" y="280" width="90" height="22" rx="3" fill="#0a1628" stroke="#1e3a5f" stroke-width="0.8"/>
+  <text x="800" y="295" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="8">google_search</text>
+
+  <rect x="680" y="306" width="140" height="22" rx="3" fill="#0a1628" stroke="#1e3a5f" stroke-width="0.8"/>
+  <text x="750" y="321" text-anchor="middle" fill="#ccddee" font-family="Segoe UI, Arial, sans-serif" font-size="8">extract_voice_profile</text>
+
+  <!-- Audio-only note -->
+  <rect x="655" y="346" width="205" height="32" rx="4" fill="#1a1015" stroke="#552233" stroke-width="0.8"/>
+  <text x="757" y="360" text-anchor="middle" fill="#cc6688" font-family="Segoe UI, Arial, sans-serif" font-size="8" font-weight="500">Audio-only model</text>
+  <text x="757" y="372" text-anchor="middle" fill="#885566" font-family="Segoe UI, Arial, sans-serif" font-size="7">Cannot process images/video frames</text>
+
+  <!-- ==================== ARROWS ==================== -->
+
+  <!-- Browser → Cloud Run: top arrow (audio up) -->
+  <line x1="270" y1="140" x2="345" y2="140" stroke="#00d2d2" stroke-width="1.8" marker-end="url(#arrow)" filter="url(#glow)"/>
+  <text x="307" y="133" text-anchor="middle" fill="#00d2d2" font-family="Segoe UI, Arial, sans-serif" font-size="7.5" font-weight="500">PCM Audio</text>
+
+  <!-- Cloud Run → Browser: return arrow (audio down) -->
+  <line x1="345" y1="245" x2="270" y2="245" stroke="#00d2d2" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.7"/>
+  <text x="307" y="239" text-anchor="middle" fill="#00a0a0" font-family="Segoe UI, Arial, sans-serif" font-size="7.5">Audio Response</text>
+
+  <!-- Cloud Run → Gemini: forward -->
+  <line x1="555" y1="140" x2="645" y2="140" stroke="#00d2d2" stroke-width="1.8" marker-end="url(#arrow)" filter="url(#glow)"/>
+  <text x="600" y="133" text-anchor="middle" fill="#00d2d2" font-family="Segoe UI, Arial, sans-serif" font-size="7.5" font-weight="500">LiveRequestQueue</text>
+
+  <!-- Gemini → Cloud Run: return -->
+  <line x1="645" y1="195" x2="555" y2="195" stroke="#00d2d2" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.7"/>
+  <text x="600" y="189" text-anchor="middle" fill="#00a0a0" font-family="Segoe UI, Arial, sans-serif" font-size="7.5">Audio Events</text>
+
+  <!-- WebSocket label between Browser and Cloud Run -->
+  <rect x="280" y="160" width="56" height="18" rx="3" fill="#0a2020" stroke="#00d2d2" stroke-width="0.8" opacity="0.5"/>
+  <text x="308" y="173" text-anchor="middle" fill="#00d2d2" font-family="Segoe UI, Arial, sans-serif" font-size="7.5">WS</text>
+
+  <!-- BIDI label between Cloud Run and Gemini -->
+  <rect x="580" y="160" width="56" height="18" rx="3" fill="#0a2020" stroke="#00d2d2" stroke-width="0.8" opacity="0.5"/>
+  <text x="608" y="173" text-anchor="middle" fill="#00d2d2" font-family="Segoe UI, Arial, sans-serif" font-size="7.5">BIDI</text>
+
+  <!-- Profile persistence arrow (loopback) -->
+  <path d="M450,274 L450,286" stroke="#3a7f7f" stroke-width="1" marker-end="url(#arrow-dim)"/>
+
+  <!-- ==================== DATA FLOW LEGEND ==================== -->
+  <rect x="30" y="455" width="840" height="32" rx="6" fill="#0d1525" stroke="#1a2744" stroke-width="1"/>
+  <text x="50" y="475" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="9" font-weight="600">DATA FLOW</text>
+  <line x1="115" y1="471" x2="155" y2="471" stroke="#00d2d2" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="162" y="475" fill="#8899bb" font-family="Segoe UI, Arial, sans-serif" font-size="8">Screen Share Tab Audio + Mic</text>
+  <text x="310" y="475" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8">--></text>
+  <text x="332" y="475" fill="#8899bb" font-family="Segoe UI, Arial, sans-serif" font-size="8">Mixed PCM over WebSocket</text>
+  <text x="490" y="475" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8">--></text>
+  <text x="512" y="475" fill="#8899bb" font-family="Segoe UI, Arial, sans-serif" font-size="8">FastAPI + ADK LiveRequestQueue</text>
+  <text x="685" y="475" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8">--></text>
+  <text x="707" y="475" fill="#8899bb" font-family="Segoe UI, Arial, sans-serif" font-size="8">Gemini Native Audio</text>
+  <text x="822" y="475" fill="#5a6a8a" font-family="Segoe UI, Arial, sans-serif" font-size="8">--></text>
+  <text x="838" y="475" fill="#00a0a0" font-family="Segoe UI, Arial, sans-serif" font-size="8">Response</text>
+</svg>
