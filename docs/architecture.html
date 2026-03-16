@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadence — Architecture</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0f1a;
+            color: #ffffff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #00d2d2;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #5a6a8a;
+            margin-bottom: 32px;
+        }
+        .diagram-container {
+            width: 100%;
+            max-width: 960px;
+            border: 1px solid #1a2744;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #0d1525;
+        }
+        .diagram-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .links {
+            margin-top: 24px;
+            display: flex;
+            gap: 20px;
+        }
+        .links a {
+            color: #00d2d2;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 16px;
+            border: 1px solid #1a2744;
+            border-radius: 6px;
+            transition: border-color 0.2s;
+        }
+        .links a:hover {
+            border-color: #00d2d2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cadence</h1>
+    <p class="subtitle">AI Creative Director — System Architecture</p>
+    <div class="diagram-container">
+        <img src="architecture.svg" alt="Cadence Architecture Diagram">
+    </div>
+    <div class="links">
+        <a href="https://github.com/brookejlacey/cadence">GitHub</a>
+        <a href="https://cadence-862848485146.us-central1.run.app">Live Demo</a>
+    </div>
+</body>
+</html>
