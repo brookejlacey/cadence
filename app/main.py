@@ -125,7 +125,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
         sessions = profile.get("sessions_completed", 0)
         name = profile.get("creator_name", "this creator")
 
-        # Inject the structured voice profile — this is what powers personalized scripts
+        # Inject the structured voice profile, this is what powers personalized scripts
         if profile.get("signature_moves"):
             moves = "\n".join(f"- {m}" for m in profile["signature_moves"])
             profile_parts.append(f"SIGNATURE MOVES:\n{moves}")
@@ -159,7 +159,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
             profile_context = types.Content(
                 role="user",
                 parts=[types.Part(text=(
-                    f"[SYSTEM: Voice profile for {name} — {sessions} previous sessions.\n\n"
+                    f"[SYSTEM: Voice profile for {name}, {sessions} previous sessions.\n\n"
                     f"{full_profile}\n\n"
                     f"USE THIS PROFILE when writing scripts, giving feedback, or coaching delivery. "
                     f"Scripts MUST incorporate these signature moves, pacing patterns, and hook styles. "
@@ -258,14 +258,14 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
                         logger.exception("Error sending event")
                         return
 
-                # BIDI stream ended normally (Gemini dropped) — retry
+                # BIDI stream ended normally (Gemini dropped), retry
                 if is_closed:
                     return
                 logger.info(
                     "BIDI stream ended (attempt %d/%d), restarting...",
                     attempt + 1, max_retries,
                 )
-                # Create a fresh request queue — upstream will pick it up via queue_ref
+                # Create a fresh request queue, upstream will pick it up via queue_ref
                 queue_ref["queue"] = LiveRequestQueue()
                 await asyncio.sleep(1)
 

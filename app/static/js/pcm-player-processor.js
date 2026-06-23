@@ -5,7 +5,7 @@
 class PCMPlayerProcessor extends AudioWorkletProcessor {
     constructor() {
         super();
-        // 30-second ring buffer at 24kHz (720KB — more than enough for streaming)
+        // 30-second ring buffer at 24kHz (720KB, more than enough for streaming)
         this._bufferSize = 24000 * 30;
         this._buffer = new Float32Array(this._bufferSize);
         this._writeIndex = 0;

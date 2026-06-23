@@ -86,7 +86,7 @@ test.describe("Cadence E2E", () => {
   test("text input does not send when not connected", async ({ page }) => {
     await page.goto(BASE);
 
-    // Type into input and try to send — should not crash
+    // Type into input and try to send, should not crash
     await page.fill("#text-input", "Hello test");
     await page.click("#send-btn");
 
@@ -193,6 +193,48 @@ test.describe("Cadence E2E", () => {
     // Wait a moment for any deferred scripts
     await page.waitForTimeout(1000);
     expect(errors).toEqual([]);
+  });
+
+  test("session learning persists structured profile across saves", async ({ page, request }) => {
+    await page.goto(BASE);
+
+    const userId = `pw_learn_${Date.now()}`;
+
+    // Drive the real client code: feed two tool results through the same
+    // handler the live agent uses, then save. No Gemini key required.
+    await page.evaluate((uid) => {
+      const c = window.cadence;
+      c.userId = uid;
+      c.sessionLearned = c._emptyLearned();
+      c._handleToolResult({
+        name: "extract_voice_profile",
+        response: {
+          signature_moves: ["Strategic silence"],
+          pacing_style: "rapid-fire with strategic slowdowns",
+          humor_style: "dry/deadpan",
+          emotional_range: ["fear_to_humor"],
+        },
+      });
+      c._handleToolResult({
+        name: "analyze_hook",
+        response: { hook_type: "direct_address", strength: "strong", notes: [] },
+      });
+      c._saveSessionProfile();
+    }, userId);
+
+    // Poll the REST API until the async save lands.
+    let profile = null;
+    for (let i = 0; i < 20; i++) {
+      const resp = await request.get(`${BASE}/api/profiles/${userId}`);
+      if (resp.ok()) { profile = (await resp.json()).profile; break; }
+      await page.waitForTimeout(150);
+    }
+
+    expect(profile).toBeTruthy();
+    expect(profile.signature_moves).toContain("Strategic silence");
+    expect(profile.pacing_style).toBe("rapid-fire with strategic slowdowns");
+    expect(profile.hook_patterns.some((h) => h.type === "direct_address")).toBeTruthy();
+    expect(profile.sessions_completed).toBe(1);
   });
 
   test("markdown renderer escapes inline code HTML", async ({ page }) => {

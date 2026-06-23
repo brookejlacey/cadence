@@ -313,6 +313,10 @@ class Cadence {
         };
         this.insights = new InsightsPanel();
 
+        // Structured voice-profile data learned during this session, accumulated
+        // from the agent's tool calls and persisted on session end.
+        this.sessionLearned = this._emptyLearned();
+
         // DOM refs
         this.statusDot = document.getElementById("status-dot");
         this.statusText = document.getElementById("status-text");
@@ -377,6 +381,7 @@ class Cadence {
             this.setStatus("connecting", "Starting...");
 
             this.stats = { startTime: null, messages: 0, frames: 0 };
+            this.sessionLearned = this._emptyLearned();
 
             this.screenStream = await navigator.mediaDevices.getDisplayMedia({
                 video: { frameRate: { max: 5 }, width: { ideal: 1280 }, height: { ideal: 720 } },
@@ -459,7 +464,7 @@ class Cadence {
     }
 
     stopSession() {
-        // Always allow stop — don't gate on state flags that may be stale
+        // Always allow stop, don't gate on state flags that may be stale
 
         this._flushCadenceTranscript();
         this.isConnected = false;
@@ -659,7 +664,7 @@ class Cadence {
     // --- Screen capture ---
 
     startScreenCapture() {
-        // Capture every 5 seconds — images are for future multimodal models,
+        // Capture every 5 seconds, images are for future multimodal models,
         // current native-audio model only processes audio
         this.captureInterval = setInterval(() => this.captureFrame(), 5000);
         // Show suggestion chips after user has had time to play a video
@@ -815,7 +820,7 @@ class Cadence {
                 }
             }
 
-            // Voice is the primary output — don't transcribe to chat.
+            // Voice is the primary output, don't transcribe to chat.
             // The chat panel is for typed messages, system info, and chips only.
             // Gemini's BIDI transcription is too unreliable for display.
 
@@ -830,7 +835,7 @@ class Cadence {
     }
 
     _flushCadenceTranscript() {
-        // No-op — voice transcription is no longer displayed in chat
+        // No-op, voice transcription is no longer displayed in chat
     }
 
     addTranscriptEntry(role, text) {
@@ -869,6 +874,7 @@ class Cadence {
                 }
                 for (const move of (p.signature_moves || [])) {
                     this.insights.addPattern("signature", move.note || move);
+                    this._learnMove(move.note || move);
                 }
             }
 
@@ -878,17 +884,29 @@ class Cadence {
                     result.strength || "medium",
                     result.notes || []
                 );
+                this._learnHook(result.hook_type || "unknown", result.strength || "medium");
             }
 
             if (name === "extract_voice_profile" && result) {
                 for (const move of (result.signature_moves || [])) {
                     this.insights.addDeliveryNote("Signature", move);
+                    this._learnMove(move);
                 }
                 if (result.pacing_style) {
                     this.insights.addDeliveryNote("Pacing", result.pacing_style);
+                    this.sessionLearned.pacing_style = result.pacing_style;
                 }
                 if (result.humor_style) {
                     this.insights.addDeliveryNote("Humor", result.humor_style);
+                    this.sessionLearned.humor_style = result.humor_style;
+                }
+                if (result.audience_relationship) {
+                    this.sessionLearned.audience_relationship = result.audience_relationship;
+                }
+                for (const arc of (result.emotional_range || [])) {
+                    if (arc && !this.sessionLearned.emotional_range.includes(arc)) {
+                        this.sessionLearned.emotional_range.push(arc);
+                    }
                 }
             }
 
@@ -922,30 +940,30 @@ class Cadence {
             this.insights.loadProfile(profile);
 
             // Populate the insights panel with demo data
-            this.insights.addPattern("hook", "Opens with conversational authority — direct address hook");
-            this.insights.addPattern("tone_shift", "Fear-to-humor arc — the 'laughing sigh' pattern");
-            this.insights.addPattern("pacing", "1.8s hook average — rapid-fire opening");
-            this.insights.addPattern("signature", "Eyebrow punctuation — left eyebrow raises on punchlines");
+            this.insights.addPattern("hook", "Opens with conversational authority, direct address hook");
+            this.insights.addPattern("tone_shift", "Fear-to-humor arc, the 'laughing sigh' pattern");
+            this.insights.addPattern("pacing", "1.8s hook average, rapid-fire opening");
+            this.insights.addPattern("signature", "Eyebrow punctuation, left eyebrow raises on punchlines");
             this.insights.addPattern("pacing", "Strategic slowdown at midpoint before accelerating close");
 
             this.insights.addHook("direct_address", "strong", [
-                "Tight hook — gets to the point fast",
-                "Addresses viewer directly — breaks fourth wall immediately",
+                "Tight hook, gets to the point fast",
+                "Addresses viewer directly, breaks fourth wall immediately",
                 "Absolute language creates stakes and urgency",
             ]);
             this.insights.addHook("curiosity_gap", "strong", [
-                "Question creates open loop — viewer stays to get the answer",
-                "Personal opener — creates immediate intimacy",
+                "Question creates open loop, viewer stays to get the answer",
+                "Personal opener, creates immediate intimacy",
             ]);
 
-            this.insights.addDeliveryNote("Signature", "The Laughing Sigh — dissolves tension with half-laugh exhale");
-            this.insights.addDeliveryNote("Signature", "Proximity Pull — leans closer on opinion shifts");
+            this.insights.addDeliveryNote("Signature", "The Laughing Sigh, dissolves tension with half-laugh exhale");
+            this.insights.addDeliveryNote("Signature", "Proximity Pull, leans closer on opinion shifts");
             this.insights.addDeliveryNote("Camera", "Direct eye contact, minimal blinking during hooks");
-            this.insights.addDeliveryNote("Energy", "8/10 opening energy — voice slightly elevated");
+            this.insights.addDeliveryNote("Energy", "8/10 opening energy, voice slightly elevated");
             this.insights.addDeliveryNote("Pacing", "Rapid-fire → strategic slowdown → accelerating close");
 
             this.addTranscriptEntry("system", `Demo mode: Loaded voice profile for ${profile.creator_name}. ${profile.videos_analyzed} videos analyzed across ${profile.sessions_completed} sessions.`);
-            this.addTranscriptEntry("cadence", `I know this creator. ${profile.creator_name} — the laughing sigh, the eyebrow punctuation, the way they lean in right when they shift from facts to opinion. ${profile.videos_analyzed} videos deep. Show me something new and I'll tell you how it fits the pattern.`);
+            this.addTranscriptEntry("cadence", `I know this creator. ${profile.creator_name}, the laughing sigh, the eyebrow punctuation, the way they lean in right when they shift from facts to opinion. ${profile.videos_analyzed} videos deep. Show me something new and I'll tell you how it fits the pattern.`);
 
             if (this.emptyState) this.emptyState.style.display = "none";
 
@@ -1014,11 +1032,11 @@ class Cadence {
             ],
             analyzed: [
                 "Search for viral trends that match my delivery style",
-                "Write me a short script in my voice — coach me through it line by line",
+                "Write me a short script in my voice, coach me through it line by line",
                 "What's the one thing I should improve?",
             ],
             scouted: [
-                "Write me a script for that trend — walk me through it like a director",
+                "Write me a script for that trend, walk me through it like a director",
                 "How would I put my own spin on that trend?",
                 "Search for more trending ideas like that",
             ],
@@ -1030,6 +1048,66 @@ class Cadence {
 
     // --- Profile persistence ---
 
+    _emptyLearned() {
+        return {
+            signature_moves: [],
+            emotional_range: [],
+            hook_patterns: [],
+            pacing_style: "",
+            humor_style: "",
+            audience_relationship: "",
+        };
+    }
+
+    _learnMove(move) {
+        if (move && !this.sessionLearned.signature_moves.includes(move)) {
+            this.sessionLearned.signature_moves.push(move);
+        }
+    }
+
+    _learnHook(type, frequency) {
+        if (!type || type === "unknown") return;
+        const existing = this.sessionLearned.hook_patterns.find(h => h.type === type);
+        if (existing) {
+            existing.count = (existing.count || 1) + 1;
+        } else {
+            this.sessionLearned.hook_patterns.push({ type, frequency, count: 1 });
+        }
+    }
+
+    // Union the structured fields learned this session into the saved profile so
+    // the voice profile genuinely builds from real audio across sessions.
+    _mergeLearned(profile) {
+        const L = this.sessionLearned;
+        const union = (a, b) => Array.from(new Set([...(a || []), ...(b || [])]));
+
+        profile.signature_moves = union(profile.signature_moves, L.signature_moves).slice(-12);
+        profile.emotional_range = union(profile.emotional_range, L.emotional_range).slice(-8);
+
+        // Prefer the most recent non-empty read for the single-value fields.
+        if (L.pacing_style) profile.pacing_style = L.pacing_style;
+        if (L.humor_style) profile.humor_style = L.humor_style;
+        if (L.audience_relationship) profile.audience_relationship = L.audience_relationship;
+
+        // Merge hook patterns by type, carrying a running count forward.
+        const hooks = {};
+        for (const h of (profile.hook_patterns || [])) hooks[h.type] = { ...h };
+        for (const h of L.hook_patterns) {
+            hooks[h.type] = hooks[h.type]
+                ? { ...hooks[h.type], count: (hooks[h.type].count || 1) + h.count }
+                : { type: h.type, frequency: h.frequency, count: h.count };
+        }
+        profile.hook_patterns = Object.values(hooks);
+        return profile;
+    }
+
+    _hasLearned() {
+        const L = this.sessionLearned;
+        return L.signature_moves.length || L.emotional_range.length ||
+            L.hook_patterns.length || L.pacing_style || L.humor_style ||
+            L.audience_relationship;
+    }
+
     _saveSessionProfile() {
         if (!this.userId) return;
 
@@ -1037,17 +1115,19 @@ class Cadence {
         const cadenceEntries = this.transcript.querySelectorAll(".transcript-entry.cadence .transcript-text");
         const observations = Array.from(cadenceEntries).map(el => el.textContent).filter(t => t.length > 20);
 
-        if (observations.length === 0) return;
+        // Nothing worth persisting if there were no observations and no learned structure
+        if (observations.length === 0 && !this._hasLearned()) return;
 
-        // Load existing profile, merge observations, save
+        // Load existing profile, merge observations + learned structure, save
         fetch(`/api/profiles/${this.userId}`)
             .then(r => r.ok ? r.json() : { profile: {} })
             .then(data => {
-                const profile = data.profile || {};
+                let profile = data.profile || {};
                 const prev = profile.session_observations || [];
                 profile.session_observations = prev.concat(observations).slice(-50); // Keep last 50
                 profile.sessions_completed = (profile.sessions_completed || 0) + 1;
                 profile.last_session = new Date().toISOString();
+                profile = this._mergeLearned(profile);
 
                 return fetch(`/api/profiles/${this.userId}`, {
                     method: "POST",
@@ -1055,7 +1135,7 @@ class Cadence {
                     body: JSON.stringify({ profile }),
                 });
             })
-            .catch(() => {}); // Silent fail — don't block session stop
+            .catch(() => {}); // Silent fail, don't block session stop
     }
 
     // --- Mode detection ---
@@ -1068,7 +1148,7 @@ class Cadence {
         } else if (lower.includes("here's a script") || lower.includes("performance document") || lower.includes("draft for you") || lower.includes("delivery notes")) {
             this._setMode("create", "CREATE");
         }
-        // Default stays STUDY — no need to actively detect it since that's the starting mode
+        // Default stays STUDY, no need to actively detect it since that's the starting mode
     }
 
     _setMode(cssClass, label) {
@@ -1110,5 +1190,6 @@ class Cadence {
 // --- Init ---
 
 document.addEventListener("DOMContentLoaded", () => {
-    new Cadence();
+    // Exposed for end-to-end tests; harmless in production.
+    window.cadence = new Cadence();
 });

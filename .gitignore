@@ -16,11 +16,10 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Claude & Markdown
+# Private agent instructions (never commit)
 CLAUDE.md
 .claude/
 *.md.bak
-*.md
 
 # Test results
 test-results/

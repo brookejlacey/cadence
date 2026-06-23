@@ -32,7 +32,7 @@ export class AudioPlayer {
     playChunk(int16ArrayBuffer) {
         if (!this.isInitialized || !this.workletNode) return;
 
-        // Mark as playing — used by mic gating to prevent echo
+        // Mark as playing, used by mic gating to prevent echo
         this.isPlaying = true;
         clearTimeout(this._playbackTimeout);
 
@@ -48,7 +48,7 @@ export class AudioPlayer {
             buffer: float32,
         });
 
-        // After each chunk, set a tail timeout — if no new chunk arrives
+        // After each chunk, set a tail timeout, if no new chunk arrives
         // within the tail delay, assume playback stopped
         this._playbackTimeout = setTimeout(() => {
             this.isPlaying = false;
