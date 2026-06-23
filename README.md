@@ -25,7 +25,7 @@ The pipeline is real-time and bidirectional end to end:
 1. **Capture (browser).** Three `AudioWorklet` processors run off the main thread: mic capture at 1.5x gain, tab-audio capture at 0.7x gain, and 24kHz PCM playback. Mic and tab audio are mixed into a single 16kHz PCM stream so the model hears both your voice and the video you are reacting to.
 2. **Transport (WebSocket).** The mixed PCM streams to a FastAPI backend over a WebSocket. Each chunk is tagged with a one-byte prefix so the server can tell mic from tab audio.
 3. **Stream to the model (BIDI).** The backend feeds audio through Google ADK's `LiveRequestQueue` into Gemini's bidirectional streaming API. Gemini streams 24kHz voice back through the same socket to the browser's playback worklet.
-4. **Remember (persistence).** What Cadence learns is written to a per-creator voice profile and re-injected as context at the start of the next session.
+4. **Remember (persistence).** As the agent analyzes a session, the structured pieces it extracts (signature moves, hook patterns, pacing, humor, emotional arcs) are merged into a per-creator voice profile on disk and re-injected as context at the start of the next session. The profile gets richer the more you use it.
 
 ### What the model does each session
 
