@@ -6,6 +6,8 @@ Most AI writing tools read your words. Cadence listens to your delivery. It stre
 
 [**Live demo**](https://cadence-862848485146.us-central1.run.app) · Requires Chrome (tab-audio capture uses `getDisplayMedia`).
 
+![Cadence interface: a live analysis panel showing a creator's voice profile, detected delivery patterns, hook analysis, and per-line delivery notes, next to the conversation with the AI director](docs/assets/screenshot.png)
+
 ---
 
 ## The core idea: audio, not transcripts
@@ -113,3 +115,7 @@ cadence/
 ├── Dockerfile
 └── requirements.txt
 ```
+
+## License
+
+MIT. See [LICENSE](LICENSE).

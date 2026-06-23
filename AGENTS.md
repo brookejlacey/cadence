@@ -8,12 +8,12 @@ Cadence is a real-time AI creative director. It streams a creator's live audio (
 
 ## Layout
 
-- `app/main.py` — FastAPI server. Owns the `/ws/{user_id}/{session_id}` WebSocket that bridges the browser to Gemini via Google ADK's `LiveRequestQueue` and `Runner`. Also serves the REST profile API and static files.
-- `app/profiles.py` — Per-creator voice-profile persistence (JSON on disk under `app/data/`, gitignored).
-- `app/cadence_agents/agent.py` — The Cadence coordinator agent: model, instruction, and tool list.
-- `app/cadence_agents/tools/content_analysis.py` — The delivery, hook, and script-annotation tools the agent calls.
-- `app/static/` — Vanilla-JS frontend. `js/app.js` is the WebSocket client and UI; the `pcm-*-processor.js` files are AudioWorklet processors that must stay off the main thread.
-- `tests/e2e.spec.js` — Playwright end-to-end suite.
+- `app/main.py`: FastAPI server. Owns the `/ws/{user_id}/{session_id}` WebSocket that bridges the browser to Gemini via Google ADK's `LiveRequestQueue` and `Runner`. Also serves the REST profile API and static files.
+- `app/profiles.py`: Per-creator voice-profile persistence (JSON on disk under `app/data/`, gitignored).
+- `app/cadence_agents/agent.py`: The Cadence coordinator agent: model, instruction, and tool list.
+- `app/cadence_agents/tools/content_analysis.py`: The delivery, hook, and script-annotation tools the agent calls.
+- `app/static/`: Vanilla-JS frontend. `js/app.js` is the WebSocket client and UI; the `pcm-*-processor.js` files are AudioWorklet processors that must stay off the main thread.
+- `tests/e2e.spec.js`: Playwright end-to-end suite.
 
 ## Conventions
 
