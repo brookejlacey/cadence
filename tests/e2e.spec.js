@@ -86,7 +86,7 @@ test.describe("Cadence E2E", () => {
   test("text input does not send when not connected", async ({ page }) => {
     await page.goto(BASE);
 
-    // Type into input and try to send — should not crash
+    // Type into input and try to send, should not crash
     await page.fill("#text-input", "Hello test");
     await page.click("#send-btn");
 

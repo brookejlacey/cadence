@@ -459,7 +459,7 @@ class Cadence {
     }
 
     stopSession() {
-        // Always allow stop — don't gate on state flags that may be stale
+        // Always allow stop, don't gate on state flags that may be stale
 
         this._flushCadenceTranscript();
         this.isConnected = false;
@@ -659,7 +659,7 @@ class Cadence {
     // --- Screen capture ---
 
     startScreenCapture() {
-        // Capture every 5 seconds — images are for future multimodal models,
+        // Capture every 5 seconds, images are for future multimodal models,
         // current native-audio model only processes audio
         this.captureInterval = setInterval(() => this.captureFrame(), 5000);
         // Show suggestion chips after user has had time to play a video
@@ -815,7 +815,7 @@ class Cadence {
                 }
             }
 
-            // Voice is the primary output — don't transcribe to chat.
+            // Voice is the primary output, don't transcribe to chat.
             // The chat panel is for typed messages, system info, and chips only.
             // Gemini's BIDI transcription is too unreliable for display.
 
@@ -830,7 +830,7 @@ class Cadence {
     }
 
     _flushCadenceTranscript() {
-        // No-op — voice transcription is no longer displayed in chat
+        // No-op, voice transcription is no longer displayed in chat
     }
 
     addTranscriptEntry(role, text) {
@@ -922,30 +922,30 @@ class Cadence {
             this.insights.loadProfile(profile);
 
             // Populate the insights panel with demo data
-            this.insights.addPattern("hook", "Opens with conversational authority — direct address hook");
-            this.insights.addPattern("tone_shift", "Fear-to-humor arc — the 'laughing sigh' pattern");
-            this.insights.addPattern("pacing", "1.8s hook average — rapid-fire opening");
-            this.insights.addPattern("signature", "Eyebrow punctuation — left eyebrow raises on punchlines");
+            this.insights.addPattern("hook", "Opens with conversational authority, direct address hook");
+            this.insights.addPattern("tone_shift", "Fear-to-humor arc, the 'laughing sigh' pattern");
+            this.insights.addPattern("pacing", "1.8s hook average, rapid-fire opening");
+            this.insights.addPattern("signature", "Eyebrow punctuation, left eyebrow raises on punchlines");
             this.insights.addPattern("pacing", "Strategic slowdown at midpoint before accelerating close");
 
             this.insights.addHook("direct_address", "strong", [
-                "Tight hook — gets to the point fast",
-                "Addresses viewer directly — breaks fourth wall immediately",
+                "Tight hook, gets to the point fast",
+                "Addresses viewer directly, breaks fourth wall immediately",
                 "Absolute language creates stakes and urgency",
             ]);
             this.insights.addHook("curiosity_gap", "strong", [
-                "Question creates open loop — viewer stays to get the answer",
-                "Personal opener — creates immediate intimacy",
+                "Question creates open loop, viewer stays to get the answer",
+                "Personal opener, creates immediate intimacy",
             ]);
 
-            this.insights.addDeliveryNote("Signature", "The Laughing Sigh — dissolves tension with half-laugh exhale");
-            this.insights.addDeliveryNote("Signature", "Proximity Pull — leans closer on opinion shifts");
+            this.insights.addDeliveryNote("Signature", "The Laughing Sigh, dissolves tension with half-laugh exhale");
+            this.insights.addDeliveryNote("Signature", "Proximity Pull, leans closer on opinion shifts");
             this.insights.addDeliveryNote("Camera", "Direct eye contact, minimal blinking during hooks");
-            this.insights.addDeliveryNote("Energy", "8/10 opening energy — voice slightly elevated");
+            this.insights.addDeliveryNote("Energy", "8/10 opening energy, voice slightly elevated");
             this.insights.addDeliveryNote("Pacing", "Rapid-fire → strategic slowdown → accelerating close");
 
             this.addTranscriptEntry("system", `Demo mode: Loaded voice profile for ${profile.creator_name}. ${profile.videos_analyzed} videos analyzed across ${profile.sessions_completed} sessions.`);
-            this.addTranscriptEntry("cadence", `I know this creator. ${profile.creator_name} — the laughing sigh, the eyebrow punctuation, the way they lean in right when they shift from facts to opinion. ${profile.videos_analyzed} videos deep. Show me something new and I'll tell you how it fits the pattern.`);
+            this.addTranscriptEntry("cadence", `I know this creator. ${profile.creator_name}, the laughing sigh, the eyebrow punctuation, the way they lean in right when they shift from facts to opinion. ${profile.videos_analyzed} videos deep. Show me something new and I'll tell you how it fits the pattern.`);
 
             if (this.emptyState) this.emptyState.style.display = "none";
 
@@ -1014,11 +1014,11 @@ class Cadence {
             ],
             analyzed: [
                 "Search for viral trends that match my delivery style",
-                "Write me a short script in my voice — coach me through it line by line",
+                "Write me a short script in my voice, coach me through it line by line",
                 "What's the one thing I should improve?",
             ],
             scouted: [
-                "Write me a script for that trend — walk me through it like a director",
+                "Write me a script for that trend, walk me through it like a director",
                 "How would I put my own spin on that trend?",
                 "Search for more trending ideas like that",
             ],
@@ -1055,7 +1055,7 @@ class Cadence {
                     body: JSON.stringify({ profile }),
                 });
             })
-            .catch(() => {}); // Silent fail — don't block session stop
+            .catch(() => {}); // Silent fail, don't block session stop
     }
 
     // --- Mode detection ---
@@ -1068,7 +1068,7 @@ class Cadence {
         } else if (lower.includes("here's a script") || lower.includes("performance document") || lower.includes("draft for you") || lower.includes("delivery notes")) {
             this._setMode("create", "CREATE");
         }
-        // Default stays STUDY — no need to actively detect it since that's the starting mode
+        // Default stays STUDY, no need to actively detect it since that's the starting mode
     }
 
     _setMode(cssClass, label) {

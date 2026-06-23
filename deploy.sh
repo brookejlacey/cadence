@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-PROJECT_ID="${GOOGLE_CLOUD_PROJECT:-gen-lang-client-0977515736}"
+PROJECT_ID="${GOOGLE_CLOUD_PROJECT:?Set GOOGLE_CLOUD_PROJECT to your GCP project id}"
 REGION="${CLOUD_RUN_REGION:-us-central1}"
 SERVICE_NAME="cadence"
 

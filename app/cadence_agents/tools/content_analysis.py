@@ -182,11 +182,11 @@ def generate_script_notes(script: str, voice_profile: str = "") -> dict:
         if stripped.endswith("?"):
             notes.append("DELIVERY: Raise pitch slightly. Lean into camera.")
         if any(w in lower for w in ["scared", "terrified", "dangerous", "threat"]):
-            notes.append("DELIVERY: Voice drops. Serious. Then soften at the end — the laughing sigh.")
+            notes.append("DELIVERY: Voice drops. Serious. Then soften at the end, the laughing sigh.")
         if any(w in lower for w in ["but", "except", "here's the thing"]):
             notes.append("DELIVERY: Pause BEFORE this line. Let them sit in the tension. Then pivot.")
         if stripped.startswith(("And ", "But ", "So ")):
-            notes.append("DELIVERY: Quick cut energy. No pause before — slam into it.")
+            notes.append("DELIVERY: Quick cut energy. No pause before, slam into it.")
 
         annotated.append({
             "line_number": i + 1,
@@ -222,20 +222,20 @@ def extract_voice_profile(observations: str) -> dict:
     lower = observations.lower()
 
     if "pause" in lower or "silence" in lower or "wait" in lower:
-        profile["signature_moves"].append("Strategic silence — uses pauses as emphasis")
+        profile["signature_moves"].append("Strategic silence, uses pauses as emphasis")
     if "eye" in lower or "look" in lower or "expression" in lower:
-        profile["signature_moves"].append("Facial counterpoint — face says something different than words")
+        profile["signature_moves"].append("Facial counterpoint, face says something different than words")
     if "laugh" in lower or "smile" in lower or "grin" in lower:
-        profile["signature_moves"].append("Tension release — humor as safety valve after heavy content")
+        profile["signature_moves"].append("Tension release, humor as safety valve after heavy content")
     if "lean" in lower or "close" in lower or "camera" in lower:
-        profile["signature_moves"].append("Proximity shift — moves closer to camera for emphasis")
+        profile["signature_moves"].append("Proximity shift, moves closer to camera for emphasis")
     if "fast" in lower or "rapid" in lower or "quick" in lower:
         profile["pacing_style"] = "rapid-fire with strategic slowdowns"
     if "slow" in lower or "deliberate" in lower:
         profile["pacing_style"] = "deliberate and measured with sharp accelerations"
     if "sarcas" in lower or "deadpan" in lower or "dry" in lower:
-        profile["humor_style"] = "dry/deadpan — humor comes from delivery, not the words themselves"
+        profile["humor_style"] = "dry/deadpan, humor comes from delivery, not the words themselves"
     if "warm" in lower or "safe" in lower or "trust" in lower:
-        profile["audience_relationship"] = "trusted guide — 'I've been through this, come with me'"
+        profile["audience_relationship"] = "trusted guide, 'I've been through this, come with me'"
 
     return profile

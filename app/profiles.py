@@ -1,4 +1,4 @@
-"""Voice profile persistence — saves what Cadence learns between sessions."""
+"""Voice profile persistence: saves what Cadence learns between sessions."""
 
 import json
 import logging
@@ -53,7 +53,7 @@ def list_profiles() -> list[dict]:
     return sorted(profiles, key=lambda p: p.get("updated_at", 0), reverse=True)
 
 
-# --- Demo profile for hackathon judges ---
+# --- Sample voice profile used by the live demo ---
 
 DEMO_PROFILE = {
     "user_id": "demo_creator",
@@ -62,29 +62,29 @@ DEMO_PROFILE = {
     "videos_analyzed": 12,
     "sessions_completed": 3,
     "signature_moves": [
-        "The Laughing Sigh — drops fear-based hook then dissolves tension with a half-laugh exhale",
-        "Eyebrow Punctuation — left eyebrow raises exactly on punchlines, 0.3s before the word lands",
-        "Proximity Pull — leans 4 inches closer to camera when shifting from information to opinion",
-        "The Trailing Pause — ends key sentences with '...' and lets 1.5s of silence carry the weight",
+        "The Laughing Sigh: drops fear-based hook then dissolves tension with a half-laugh exhale",
+        "Eyebrow Punctuation: left eyebrow raises exactly on punchlines, 0.3s before the word lands",
+        "Proximity Pull: leans 4 inches closer to camera when shifting from information to opinion",
+        "The Trailing Pause: ends key sentences with '...' and lets 1.5s of silence carry the weight",
     ],
     "emotional_range": [
-        "fear_to_humor — 68% of videos use this arc",
-        "curiosity_to_revelation — used in tutorial content",
-        "vulnerability_to_strength — used in personal stories",
+        "fear_to_humor: 68% of videos use this arc",
+        "curiosity_to_revelation: used in tutorial content",
+        "vulnerability_to_strength: used in personal stories",
     ],
     "pacing_style": "Rapid-fire opening (first 3s), strategic slowdown at midpoint, accelerating close. Average hook length: 1.8 seconds.",
     "humor_style": "Dry delivery with deadpan setup → eyebrow raise → half-smile. Never laughs at own jokes. Humor lands through contrast, not emphasis.",
-    "audience_relationship": "Trusted insider — 'I figured this out so you don't have to.' Frames authority through personal failure stories.",
+    "audience_relationship": "Trusted insider: 'I figured this out so you don't have to.' Frames authority through personal failure stories.",
     "hook_patterns": [
         {"type": "direct_address", "frequency": "45%", "example": "Nobody is talking about this."},
         {"type": "curiosity_gap", "frequency": "30%", "example": "I spent 6 months testing this and..."},
         {"type": "authority_frame", "frequency": "25%", "example": "As someone who lost $40k doing this..."},
     ],
     "delivery_notes": {
-        "opening_energy": "8/10 — always starts high, voice slightly elevated",
+        "opening_energy": "8/10: always starts high, voice slightly elevated",
         "camera_presence": "Direct eye contact, minimal blinking during hooks",
         "hand_gestures": "Counting fingers for lists, open palm for emphasis",
-        "background_consistency": "Minimal — blurred home office, focus stays on face",
+        "background_consistency": "Minimal: blurred home office, focus stays on face",
     },
     "content_themes": ["AI/tech commentary", "creator economy", "productivity tools", "contrarian takes"],
     "created_at": 1710460800,
